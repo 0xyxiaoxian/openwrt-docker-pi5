@@ -12,6 +12,11 @@ jobs:
      # 1. 检出代码
       - name: Checkout repository
         uses: actions/checkout@v3
+      # 下载onmyzsh
+      - name: Run preset-terminal-tools.sh
+        run: |
+          chmod +x scripts/preset-terminal-tools.sh
+          ./scripts/preset-terminal-tools.sh
 
       # 2. 设置 Docker Buildx
       - name: Set up Docker Buildx
