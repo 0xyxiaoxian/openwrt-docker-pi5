@@ -1,0 +1,48 @@
+name: Build and Push ImmortalWrt Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+     # 1. 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. 设置 Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3. 下载并解压 ImageBuilder
+      - name: Download ImageBuilder
+        run: |
+          wget https://downloads.openwrt.org/releases/23.05.4/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          tar -xJf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+
+      # 4. 编译固件
+      - name: Compile ImmortalWrt
+        working-directory: immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64
+        run: |
+          make image PROFILE=rpi-4 PACKAGES="$(cat ../packages.config)" FILES=files
+
+      # 5. 解压生成的 rootfs.tar.gz 到构建上下文
+      - name: Prepare Docker Context
+        run: |
+          mkdir -p docker-context
+          tar -xvf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/immortalwrt-23.05.4-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz -C docker-context
+
+      # 6. 构建并推送 Docker 镜像
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          platforms: linux/${{ secrets.TARGET_ARCH }}
+          context: ./docker-context
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/immortalwrt:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/immortalwrt:latest
