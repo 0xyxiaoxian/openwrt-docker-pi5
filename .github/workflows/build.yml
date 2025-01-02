@@ -35,6 +35,19 @@ jobs:
           wget https://downloads.immortalwrt.org/releases/23.05.4/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
           tar -xJf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
 
+      - name: Configure ImageBuilder
+        run: |
+          cd immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64
+          # 启用 CONFIG_TARGET_ROOTFS_TARGZ
+          sed -i '/^# CONFIG_TARGET_ROOTFS_TARGZ is not set/d' .config
+          echo "CONFIG_TARGET_ROOTFS_TARGZ=y" >> .config
+
+          # 禁用 CONFIG_TARGET_ROOTFS_EXT4FS
+          sed -i 's/^CONFIG_TARGET_ROOTFS_EXT4FS=y/# CONFIG_TARGET_ROOTFS_EXT4FS=y/' .config
+
+          # 禁用 CONFIG_TARGET_ROOTFS_SQUASHFS
+          sed -i 's/^CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS=y/' .config
+
       # 4. 编译固件
       - name: Compile ImmortalWrt
         working-directory: immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64
