@@ -3,6 +3,8 @@ name: Build and Push ImmortalWrt Docker Image
 on:
   push:
     branches: [ "main" ]
+  schedule: # 添加定时触发
+    - cron: '0 1 * * *'  # 每天凌晨 1 点（UTC 时间）
   workflow_dispatch:
 
 jobs:
@@ -59,6 +61,12 @@ jobs:
         run: |
           mkdir -p docker-context
           tar -xvf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/immortalwrt-23.05.4-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz -C docker-context
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       # 6. 构建并推送 Docker 镜像
       - name: Build and Push Docker Image
