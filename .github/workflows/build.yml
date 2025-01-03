@@ -34,12 +34,12 @@ jobs:
       # 3. 下载并解压 ImageBuilder
       - name: Download ImageBuilder
         run: |
-          wget https://downloads.immortalwrt.org/releases/23.05.4/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
-          tar -xJf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          wget https://downloads.immortalwrt.org/releases/23.05-SNAPSHOT/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          tar -xJf immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64.tar.xz
 
       - name: Configure ImageBuilder
         run: |
-          cd immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64
+          cd immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64
           # 启用 CONFIG_TARGET_ROOTFS_TARGZ
           sed -i '/^# CONFIG_TARGET_ROOTFS_TARGZ is not set/d' .config
           echo "CONFIG_TARGET_ROOTFS_TARGZ=y" >> .config
@@ -52,7 +52,7 @@ jobs:
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
-        working-directory: immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64
         run: |
           make image PACKAGES="$PACKAGES" FILES=files
 
@@ -60,7 +60,7 @@ jobs:
       - name: Prepare Docker Context
         run: |
           mkdir -p docker-context
-          tar -xvf immortalwrt-imagebuilder-23.05.4-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/immortalwrt-23.05.4-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz -C docker-context
+          tar -xvf immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/immortalwrt-23.05-SNAPSHOT-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz -C docker-context
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -77,5 +77,4 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/immortalwrt:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/immortalwrt:latest
+            ${{ secrets.DOCKER_USERNAME }}/openwrt-pi5:latest

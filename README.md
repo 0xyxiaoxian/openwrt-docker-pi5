@@ -1,16 +1,17 @@
 # ImmortalWrt Docker Image Builder
 
-[![Build Status](https://github.com/your-username/your-repo/actions/workflows/build.yml/badge.svg)](https://github.com/your-username/your-repo/actions)
+[![Build Status](https://github.com/xugd2019/openwrt-docker-pi5/actions/workflows/build.yml/badge.svg)](https://github.com/xugd2019/openwrt-docker-pi5/actions)
 
-本项目通过 GitHub Actions 实现了自动化构建和推送自定义 [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) Docker 镜像。工作流会在代码更新时或每天凌晨 1 点（UTC）自动触发。
+本项目通过 GitHub Actions 实现了自动化构建和推送自定义适用于树莓派 4～5的 [ImmortalWrt](https://github.com/immortalwrt/immortalwrt) Docker 镜像。工作流会在代码更新时或每天凌晨 1 点（UTC）自动触发。
 
 ## 功能特点
 
-- 自动化构建和部署 ImmortalWrt 镜像。
+- 自动化编译、构建 ImmortalWrt 镜像。
+- 上游为ImmortalWrt 23.05，主题使用argon。
 - 支持通过 `packages.config` 文件自定义包列表。
 - 自动生成并推送 Docker 镜像至 Docker Hub。
 
-## 使用方法
+## 自动构建使用方法
 
 ### 先决条件
 
@@ -20,16 +21,16 @@
     - `DOCKER_USERNAME`：您的 Docker Hub 用户名。
     - `DOCKER_PASSWORD`：您的 Docker Hub 访问令牌。
 
-### 构建步骤
+### 部署构建步骤
 
 1. Fork 本仓库。
 2. 编辑 `packages.config` 文件，将您需要的包名称按行添加到文件中。
+2. 编辑 `network` 文件，修改为您的网段。
 3. 推送代码更改至仓库，即可触发自动化构建。
 
 GitHub Actions 工作流将执行以下操作：
 - 下载 ImmortalWrt ImageBuilder。
-- 修改 `.config` 文件以启用自定义配置（例如 `CONFIG_TARGET_ROOTFS_TARGZ=y`）。
-- 使用指定的包构建自定义 ImmortalWrt 镜像。
+- 修改 `.config` 文件，编译出rootfs.tar.gz。
 - 提取生成的 `rootfs.tar.gz` 文件至 Docker 构建上下文。
 - 构建并推送 Docker 镜像至 Docker Hub。
 
@@ -41,8 +42,7 @@ GitHub Actions 工作流将执行以下操作：
 
 生成的 Docker 镜像将推送至：
 ```
-docker.io/<DOCKER_USERNAME>/immortalwrt:latest
-docker.io/<DOCKER_USERNAME>/immortalwrt:<commit-sha>
+docker.io/xugd/openwrt-pi5:latest
 ```
 
 ### 示例配置
@@ -59,16 +59,22 @@ tmux
 wget-ssl
 ```
 
+以下是一个 `network` 文件的示例：
+
+```
+config interface 'lan'
+        option proto 'static'
+        option netmask '255.255.255.0'
+        option ipaddr '192.168.1.105'
+        option gateway '192.168.1.103'
+        option dns '192.168.1.103'
+        option device 'br-lan'
+```
 ### 获取生成的 Docker 镜像
 
 拉取镜像：
 ```bash
-docker pull <DOCKER_USERNAME>/immortalwrt:latest
-```
-
-运行镜像：
-```bash
-docker run --rm -it <DOCKER_USERNAME>/immortalwrt /bin/ash
+docker pull xugd/openwrt-pi5:latest
 ```
 
 ## 贡献指南
@@ -77,9 +83,10 @@ docker run --rm -it <DOCKER_USERNAME>/immortalwrt /bin/ash
 
 ## 许可证
 
-本项目使用 MIT 许可证，详情请参阅 `LICENSE` 文件。
+本项目使用 GPL 许可证，详情请参阅 `LICENSE` 文件。
 
 ## 鸣谢
 
 - [ImmortalWrt](https://github.com/immortalwrt/immortalwrt)
 - [Docker](https://www.docker.com/)
+- [SuLingGG](https://github.com/SuLingGG)
