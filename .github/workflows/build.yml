@@ -58,10 +58,9 @@ jobs:
 
       # 5. 解压生成的 rootfs.tar.gz 到构建上下文
       - name: Prepare Docker Context
-        working-directory: immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
         run: |
           mkdir -p docker-context
-          tar -xvf *rootfs.tar.gz -C docker-context
+          tar -xvf immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/*rootfs.tar.gz -C docker-context
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
