@@ -56,11 +56,16 @@ jobs:
         run: |
           make image PACKAGES="$PACKAGES" FILES=files
 
+      - name: Find RootFS File
+        id: find-rootfs
+        run: echo "ROOTFS_FILE=$(find ./bin/targets/bcm27xx/bcm2711/ -name '*rootfs.tar.gz' | head -n 1)" >> $GITHUB_ENV
+
+
       # 5. 解压生成的 rootfs.tar.gz 到构建上下文
       - name: Prepare Docker Context
         run: |
           mkdir -p docker-context
-          tar -xvf immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/immortalwrt-23.05-SNAPSHOT-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz -C docker-context
+          tar -xvf $ROOTFS_FILE -C docker-context
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
