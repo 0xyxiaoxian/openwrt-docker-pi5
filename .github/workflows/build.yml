@@ -49,12 +49,13 @@ jobs:
 
           # 禁用 CONFIG_TARGET_ROOTFS_SQUASHFS
           sed -i 's/^CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS=y/' .config
+          cp -rf $GITHUB_WORKSPACE/files
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
         working-directory: immortalwrt-imagebuilder-23.05-SNAPSHOT-bcm27xx-bcm2711.Linux-x86_64
         run: |
-          make image PACKAGES="$PACKAGES" FILES=files
+          make image PACKAGES="$PACKAGES" FILES="files"
 
       # 5. 解压生成的 rootfs.tar.gz 到构建上下文
       - name: Prepare Docker Context
