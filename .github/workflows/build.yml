@@ -49,7 +49,7 @@ jobs:
 
           # 禁用 CONFIG_TARGET_ROOTFS_SQUASHFS
           sed -i 's/^CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS=y/' .config
-          cp -rf $GITHUB_WORKSPACE/files
+          cp -rf $GITHUB_WORKSPACE/files .
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
