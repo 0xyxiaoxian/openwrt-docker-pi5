@@ -14,12 +14,6 @@ jobs:
      # 1. 检出代码
       - name: Checkout repository
         uses: actions/checkout@v3
-      # 下载onmyzsh
-      - name: Run preset-terminal-tools.sh
-        run: |
-          chmod +x scripts/preset-terminal-tools.sh
-          ./scripts/preset-terminal-tools.sh
-
       # 设置 PACKAGES 环境变量
       - name: Load packages.config to environment
         id: set-packages-env
@@ -49,7 +43,14 @@ jobs:
 
           # 禁用 CONFIG_TARGET_ROOTFS_SQUASHFS
           sed -i 's/^CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS=y/' .config
+          
+          # 复制配置文件
           cp -rf $GITHUB_WORKSPACE/files .
+
+          # 下载onmyzsh
+          chmod +x $GITHUB_WORKSPACE/scripts/*
+          ./scripts/preset-terminal-tools.sh
+          $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
