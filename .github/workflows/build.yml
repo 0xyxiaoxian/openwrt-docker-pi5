@@ -49,7 +49,6 @@ jobs:
 
           # 下载onmyzsh
           chmod +x $GITHUB_WORKSPACE/scripts/*
-          ./scripts/preset-terminal-tools.sh
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
 
       # 4. 编译固件
