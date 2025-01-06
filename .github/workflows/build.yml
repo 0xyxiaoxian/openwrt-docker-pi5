@@ -77,4 +77,4 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/openwrt-pi5:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:latest

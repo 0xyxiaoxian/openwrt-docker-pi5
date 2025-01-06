@@ -11,6 +11,10 @@
 - 支持通过 `packages.config` 文件自定义包列表。
 - 自动生成并推送 Docker 镜像至 Docker Hub。
 
+## 镜像使用方法
+
+[openwrt-pi5](https://hub.docker.com/repository/docker/xugd/openwrt-pi5)
+
 ## 自动构建使用方法
 
 ### 先决条件
