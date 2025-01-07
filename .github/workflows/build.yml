@@ -51,10 +51,12 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/scripts/*
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           
-          #增加istore仓库
-          sed -i '/src\/gz immortalwrt_telephony/a\\' repositories.conf
-          cat $GITHUB_WORKSPACE/repositories-user.conf >> repositories.conf
-          cat repositories.conf
+          #下载istore仓库
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-app-store_xxx.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-taskd_xxx.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-xterm_xxx.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/taskd_xxx.ipk
+          ls -l packages/
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
