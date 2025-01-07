@@ -54,6 +54,7 @@ jobs:
           #增加istore仓库
           sed -i '/src\/gz immortalwrt_telephony/a\\' repositories.conf
           cat $GITHUB_WORKSPACE/repositories-user.conf >> repositories.conf
+          cat repositories.conf
 
       # 4. 编译固件
       - name: Compile ImmortalWrt
