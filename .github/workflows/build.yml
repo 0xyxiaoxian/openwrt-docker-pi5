@@ -51,11 +51,11 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/scripts/*
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           
-          #下载istore仓库
-          wget -r -np -nd -A "luci-app-store" -P packages https://istore.linkease.com/repo/all/store/
-          wget -r -np -nd -A "luci-lib-taskd" -P packages https://istore.linkease.com/repo/all/store/
-          wget -r -np -nd -A "luci-lib-xterm" -P packages https://istore.linkease.com/repo/all/store/
-          wget -r -np -nd -A "taskd" -P packages https://istore.linkease.com/repo/all/store/
+          #下载istore
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-app-store_0.1.27-3_all.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-taskd_1.0.20_all.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-xterm_4.18.0_all.ipk
+          wget -P packages https://istore.linkease.com/repo/all/store/taskd_1.0.3-2_all.ipk
           ls -l packages/
 
       # 4. 编译固件
