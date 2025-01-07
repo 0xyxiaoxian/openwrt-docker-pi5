@@ -52,10 +52,10 @@ jobs:
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
           
           #下载istore仓库
-          wget -P packages https://istore.linkease.com/repo/all/store/luci-app-store_xxx.ipk
-          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-taskd_xxx.ipk
-          wget -P packages https://istore.linkease.com/repo/all/store/luci-lib-xterm_xxx.ipk
-          wget -P packages https://istore.linkease.com/repo/all/store/taskd_xxx.ipk
+          wget -r -np -nd -A "luci-app-store" -P packages https://istore.linkease.com/repo/all/store/
+          wget -r -np -nd -A "luci-lib-taskd" -P packages https://istore.linkease.com/repo/all/store/
+          wget -r -np -nd -A "luci-lib-xterm" -P packages https://istore.linkease.com/repo/all/store/
+          wget -r -np -nd -A "taskd" -P packages https://istore.linkease.com/repo/all/store/
           ls -l packages/
 
       # 4. 编译固件
